@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+pandas = "==1.1.5"
+numpy = "==1.19.5"
+tweepy = "*"
+praw = "*"
+beautifulsoup4 = "*"
+nltk = "*"
+spacy = "*"
+contractions = "*"
+textblob = "*"
+afinn = "*"
+dataclasses = "*"
+contextvars = "*"
+plotly = "*"
+
+[dev-packages]
+python-dotenv = "*"

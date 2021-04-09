@@ -1,0 +1,130 @@
+.navbar-brand {
+    display: inline-block;
+    padding: 5px;
+}
+
+#navbarSupportedContent {
+    justify-content: flex-end;
+}
+
+#rotateLogo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    position: relative;
+}
+
+#rotateLogo > img {
+    height: 50px;
+    object-fit: contain;
+
+    position: absolute;
+    left: 0;
+
+    animation-name: rotateFadeInOut;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 16.5s;
+}
+
+#rotateLogo > img:nth-of-type(1) {
+    animation-delay: 11s;
+}
+
+#rotateLogo > img:nth-of-type(2) {
+    animation-delay: 5.5s;
+}
+
+#rotateLogo > img:nth-of-type(3) {
+    animation-delay: 0;
+}
+
+@keyframes rotateFadeInOut {
+    0% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    33% {
+        opacity: 0;
+    }
+
+    97% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Crossfading Images:
+
+For "n" images You must define:
+a=presentation time for one image
+b=duration for cross fading
+Total animation-duration is of course t=(a+b)*n
+
+animation-delay = t/n or = a+b
+
+Percentage for keyframes:
+1. 0%
+2. a/t*100%
+3. (a+b)/t*100% = 1/n*100%
+4. 100%-(b/t*100%)
+5. 100%
+*/
+
+.modalLoadingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.rotate-color {
+    color: #74be55;
+    animation: 
+        1s alternate infinite rotateColor,
+        .75s linear infinite spinner-border;
+}
+
+@keyframes rotateColor {
+    0%   {color: #74be55;}
+    50%  {color: #f2c933;}
+    100% {color: #ed334d;}
+}
+
+.content-wrapper {
+    padding: 30px 10px;
+    min-height: 90vh;
+}
+
+.accordion-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+
+.footer {
+    width: 100%;
+    background-color: #212529;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #ffffff8c;
+
+    padding: 40px 12px;
+}
+
+.footer > img {
+    width: 15px;
+    margin: 0 5px;
+}

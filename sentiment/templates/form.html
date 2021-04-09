@@ -1,0 +1,164 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h2>Start an analysis</h2>
+    <p>Fill the form below and choose between the options available.</p>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body modalLoadingContainer">
+                    <p>Wait while the sentiment is beeing processed..</p>
+
+                    <!-- Loading -->
+                    <div>
+                        <div class="spinner-border rotate-color mt-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form action="/sentiment" name="search" method="POST" onsubmit="showLoading();">
+        <!-- Search keyword -->
+        <div class="mb-3">
+            <label for="inputKeyword" class="form-label">Search keyword</label>
+            <input type="text" placeholder="Type in a keyword" name="inputKeyword" id="inputKeyword" class="form-control" aria-describedby="keywordHelpBlock" maxlength="30" required>
+            <div id="keywordHelpBlock" class="form-text">
+                Limited to 30 characters
+            </div>
+        </div>
+
+        <!-- Configs -->
+        <div class="row mb-3">
+            <div class="col">
+                <label for="inputLimit" class="form-label" >Limit</label>
+                <input type="number" id="inputLimit" name="inputLimit" class="form-control" value="10" aria-describedby="limitHelpBlock" min="0" max="10000" required>
+                <div id="keywordHelpBlock" class="form-text">
+                    Max value is 10.000
+                </div>
+            </div>
+            <div class="col">
+                <label for="inputLanguage" class="form-label">Language</label>
+                <input type="text" id="inputLanguage" name="inputLanguage" class="form-control" aria-describedby="languageHelpBlock" value="en" disabled>
+            </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="row mb-3">
+            <div class="col">
+                <label for="inputStartDate" class="form-label">Start date</label>
+                <input type="date" id="inputStartDate" name="inputStartDate" class="form-control" aria-describedby="startDateHelpBlock" required>
+                <div id="keywordHelpBlock" class="form-text">
+                    Limited to the last 6 days
+                </div>
+            </div>
+            <div class="col">
+                <label for="inputEndDate" class="form-label">End date</label>
+                <input type="date" id="inputEndDate" name="inputEndDate" class="form-control" aria-describedby="endDateHelpBlock" required>
+            </div>
+        </div>
+
+        <!-- Data Source -->
+        <div class="mb-3">
+            <p>Data source</p>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSourceTwitter" name="checkboxSourceTwitter" value="Twitter" checked>
+                <label class="form-check-label" for="checkboxSourceTwitter">Twitter</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSourceReddit" name="checkboxSourceReddit" value="Reddit" checked>
+                <label class="form-check-label" for="checkboxSourceReddit">Reddit</label>
+            </div>
+        </div>
+
+        <!-- Text processing -->
+        <div class="mb-3">
+            <p>Text processing</p>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingStopwords" name="checkboxTextProcessingStopwords" value="Stopwords" checked>
+                <label class="form-check-label" for="checkboxTextProcessingStopwords">Remove Stopwords</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingExpandContractions" name="checkboxTextProcessingExpandContractions" value="ExpandContractions" checked>
+                <label class="form-check-label" for="checkboxTextProcessingExpandContractions">Expand contractions</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingStemming" name="checkboxTextProcessingStemming" value="Stemming" disabled>
+                <label class="form-check-label" for="checkboxTextProcessingStemming">Stemming</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingLemmatization" name="checkboxTextProcessingLemmatization" value="Lemmatization" checked>
+                <label class="form-check-label" for="checkboxTextProcessingLemmatization">Lemmatization</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingRemoveAccent" name="checkboxTextProcessingRemoveAccent" value="RemoveAccent" checked>
+                <label class="form-check-label" for="checkboxTextProcessingRemoveAccent">Remove Accent</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingRemoveSpecialChararacters" name="checkboxTextProcessingRemoveSpecialChararacters" value="RemoveSpecialChararacters" checked>
+                <label class="form-check-label" for="checkboxTextProcessingRemoveSpecialChararacters">Remove Special Characters</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingRemoveHtmlTags" name="checkboxTextProcessingRemoveHtmlTags" value="RemoveHtmlTags" checked>
+                <label class="form-check-label" for="checkboxTextProcessingRemoveHtmlTags">Remove HTML Tags</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingRemoveTwitterSpecialChar" name="checkboxTextProcessingRemoveTwitterSpecialChar" value="RemoveTwitterSpecialChar" checked>
+                <label class="form-check-label" for="checkboxTextProcessingRemoveTwitterSpecialChar">Remove Twitter Special Characters</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingRemoveNumbers" name="checkboxTextProcessingRemoveNumbers" value="RemoveNumbers" checked>
+                <label class="form-check-label" for="checkboxTextProcessingRemoveNumbers">Remove Numbers</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxTextProcessingDropDuplicates" name="checkboxTextProcessingDropDuplicates" value="DropDuplicates" checked>
+                <label class="form-check-label" for="checkboxTextProcessingDropDuplicates">Drop Duplicates</label>
+            </div>
+        </div>
+
+        <!-- Sentiment analysis -->
+        <div class="mb-3">
+            <p>Sentiment analysis</p>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSentimentAnalysisNLTK" name="checkboxSentimentAnalysisNLTK" value="NLTK" checked>
+                <label class="form-check-label" for="checkboxSentimentAnalysisNLTK">NLTK</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSentimentAnalysisTextblobPatternAnalyzer" name="checkboxSentimentAnalysisTextblobPatternAnalyzer" value="TextblobPatternAnalyzer">
+                <label class="form-check-label" for="checkboxSentimentAnalysisTextblobPatternAnalyzer">Textblob (PatternAnalyzer)</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSentimentAnalysisTextblobNaiveBayesAnalyzer" name="checkboxSentimentAnalysisTextblobNaiveBayesAnalyzer" value="TextblobNaiveBayesAnalyzer">
+                <label class="form-check-label" for="checkboxSentimentAnalysisTextblobNaiveBayesAnalyzer">Textblob (NaiveBayesAnalyzer)</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="checkboxSentimentAnalysisAFINN" name="checkboxSentimentAnalysisAFINN" value="AFINN">
+                <label class="form-check-label" for="checkboxSentimentAnalysisAFINN">AFINN</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Process</button>
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script src="./assets/js/form.js"></script>
+{% endblock %}

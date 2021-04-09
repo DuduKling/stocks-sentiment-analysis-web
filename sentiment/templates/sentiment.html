@@ -1,0 +1,273 @@
+{% extends 'index.html' %}
+
+{% block scripthead %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <h2>Sentiment</h2>
+
+    {% if errorList is defined %}
+        {% for error in errorList %}
+            <div class="alert alert-danger" role="alert">
+                An error has occurred: {{ error }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <br />
+
+        <h4>Input</h4>
+        <hr>
+        <p>
+            <span style="font-weight: bold;">Keyword: </span> {{ formData.inputKeyword }} <br />
+            <span style="font-weight: bold;">Limit: </span> {{ formData.inputLimit }} <br />
+            <span style="font-weight: bold;">Start Date: </span> {{ formData.inputStartDate }} <br />
+            <span style="font-weight: bold;">End Date: </span> {{ formData.inputEndDate }} <br />
+
+            <span style="font-weight: bold;">Source: </span>
+                {% for key, value in formData.items() if 'checkboxSource' in key %}
+                    {{ value }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+                <br />
+
+            <span style="font-weight: bold;">Text processing: </span>
+            {% for key, value in formData.items() if 'checkboxTextProcessing' in key %}
+                {{ value }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+            <br />
+
+            <span style="font-weight: bold;">Sentiment analysis: </span>
+            {% for key, value in formData.items() if 'checkboxSentiment' in key %}
+                {{ value }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+            <br />
+        </p>
+
+        <br />
+
+        <h4>Dataset</h4>
+        <hr>
+        <p>Sample of the data retrieved:</p>
+
+        <table class="table table-sm table-striped table-hover" data-pagination="true" data-page-size="5">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Text</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dataSourceSample %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td style="width: 100px">{{row[0]}}</td>
+                        <td>{{row[3]}}</td>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Full Dataset -->
+        <div class="accordion" id="accordion1">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Full dataset ({{dataSource|length}})
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion1">
+                    <div class="accordion-body">
+                        <table class="table table-sm table-striped table-hover" data-pagination="true" data-page-size="5">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">Source</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Text</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in dataSource %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index }}</th>
+                                        <td style="width: 100px">{{row[0]}}</td>
+                                        <td>{{row[3]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>{{row[2]}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <h4>Processed Dataset</h4>
+        <hr>
+        <p>Sample of the processed data:</p>
+
+        <table class="table table-sm table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    {% for col in dataProcessColumnNames %}
+                        <th>{{col}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dataProcessSample %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col, row_ in zip(dataProcessColumnNames, row) %}
+                            <td>{{row_}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Full Processed Dataset -->
+        <div class="accordion" id="accordion2">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Full Processed Dataset ({{dataProcess|length}})
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion2">
+                    <div class="accordion-body">
+                        <table class="table table-sm table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    {% for col in dataProcessColumnNames %}
+                                        <th>{{col}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in dataProcess %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index }}</th>
+                                        {% for col, row_ in zip(dataProcessColumnNames, row) %}
+                                            <td>{{row_}}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <h5>Graphs</h5>
+        <div class="accordion-body">
+            {% for graph in dataProcessedGraphs %}
+                <div class="chart" id="{{ graph.type }}">
+                    <script>
+                        Plotly.newPlot(
+                            '{{ graph.type }}',
+                            {{ graph.data | safe }},
+                            {{ graph.layout | safe }}
+                        );
+                    </script>
+                </div>
+            {% endfor %}
+        </div>
+
+        <br />
+
+        <h4>Consolidated Dataset</h4>
+        <hr>
+        <p>Sample of the consolidated data:</p>
+
+        <table class="table table-sm table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    {% for col in dataConsolidatedColumnNames %}
+                        <th>{{col}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dataConsolidatedSample %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col, row_ in zip(dataConsolidatedColumnNames, row) %}
+                            <td>{{row_}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Full Processed Dataset -->
+        <div class="accordion" id="accordion2">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Full Processed Dataset ({{dataConsolidated|length}})
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion2">
+                    <div class="accordion-body">
+                        <table class="table table-sm table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    {% for col in dataConsolidatedColumnNames %}
+                                        <th>{{col}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in dataConsolidated %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index }}</th>
+                                        {% for col, row_ in zip(dataConsolidatedColumnNames, row) %}
+                                            <td>{{row_}}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <h5>Graphs</h5>
+        <div class="accordion-body">
+            {% for graph in dataConsolidatedGraphs %}
+                <div class="chart" id="{{ graph.type }}">
+                    <script>
+                        Plotly.newPlot(
+                            '{{ graph.type }}',
+                            {{ graph.data | safe }},
+                            {{ graph.layout | safe }}
+                        );
+                    </script>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+{% endblock %}
