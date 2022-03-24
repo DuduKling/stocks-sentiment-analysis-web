@@ -1,4 +1,4 @@
-# [Sentiment analysis for stocks web](https://bi-master-sentiment-analysis.herokuapp.com)
+# [stocks-sentiment-analysis-web](https://bi-master-sentiment-analysis.herokuapp.com)
 
 Simplified web version of the work presented to the [BI MASTER](https://ica.puc-rio.ai/bi-master) course as a prerequisite for completing the course.
 
