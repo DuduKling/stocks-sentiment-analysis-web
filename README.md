@@ -1,16 +1,31 @@
-# Sentiment analysis for stocks web
+# [Sentiment analysis for stocks web](https://bi-master-sentiment-analysis.herokuapp.com)
 
 Simplified web version of the work presented to the [BI MASTER](https://ica.puc-rio.ai/bi-master) course as a prerequisite for completing the course.
 
 The code for this work can be found at this [repository](https://github.com/DuduKling/stocks-sentiment-analysis).
 
-## Web utilization
+
+## The project
+
+![image-1](./docs/image-1.png)
+
+![image-2](./docs/image-2.png)
+
+![image-3](./docs/image-3.png)
+
+![image-4](./docs/image-4.png)
+
+![image-5](./docs/image-5.png)
+
+
+## Utilization
 
 This repository is hosted on [Heroku](https://www.heroku.com) and can be accessed through this [link](https://bi-master-sentiment-analysis.herokuapp.com).
 
 > It may take a while for the site to load because of all the initialization and packages installation
 
-## The project
+
+## Tech
 
 This project was developed in [Python](https://www.python.org), with the website developed in [Flask](https://flask.palletsprojects.com/en/1.1.x/).
 
@@ -23,6 +38,7 @@ Sentiment Analysis were processed with [NLTK](https://www.nltk.org), [TextBlob](
 Graphics rendered with [Plotly](https://plotly.com).
 
 All the packages used in this project can be found at the [Pip File](./Pipfile).
+
 
 ## Build & run
 
